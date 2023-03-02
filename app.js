@@ -9,7 +9,7 @@ const wiseSayings = [
     author: "김영하",
   },
   {
-    content : "어서오세요 휴남동 서점입니다.",
+    content : "어서 오세요 휴남동 서점입니다.",
     author: "황보름",
   }
 ];
