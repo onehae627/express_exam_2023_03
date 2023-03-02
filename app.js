@@ -1,20 +1,23 @@
 import express from "express";
 
-const app = express()
-const port = 3000
+const app = express();
+const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!!!!!!!!!!!!!!!')
+const wiseSayings = [
+  {
+    content : "작별 인사",
+    author: "김영하",
+  },
+  {
+    content : "어서오세요 휴남동 서점입니다.",
+    author: "황보름",
+  }
+];
+
+app.get('/wise-sayings', (req, res) => {
+  res.json(wiseSayings);
 });
-
-app.get('/about', (req, res) => {
-    res.send('about!')
-});
-
-app.get('/setting', (req, res) => {
-    res.send('setting!')
-});  
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}`);
 });
