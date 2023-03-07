@@ -25,13 +25,13 @@ const wiseSayings = [
     author: "황보름",
   }
 ];
-
+// get
 app.get("/wise-sayings", async (req, res) => {
   const [rows] = await pool.query("SELECT * FROM wise_saying ORDER BY id DESC");
 
   res.json(rows);
 });
-
+// post
 app.post("/wise-sayings", async (req, res) => {
   const { author, content } = req.body;
 
@@ -58,11 +58,14 @@ app.post("/wise-sayings", async (req, res) => {
     `,
     [content, author]
   );
-
+  
   res.status(201).json({
     id: rs.insertId,
   });
 });
+
+
+
 
 app.get("/wise-sayings/:id", async (req, res) => {
   const { id } = req.params;
@@ -78,6 +81,50 @@ app.get("/wise-sayings/:id", async (req, res) => {
 
   res.json(rows[0]);
 });
+
+app.patch("/wise-sayings/:id", async (req, res) => {
+  const { id } = req.params;
+  const { author, content } = req.body;
+  const [rows] = await pool.query("SELECT * FROM wise_saying WhERE id = ?", [
+    id,
+  ]);
+
+  if (rows.length == 0) {
+    res.status(404).send("not found");
+    return;
+  }
+
+  if (!author) {
+    res.status(400).json({
+      msg: "author required",
+    });
+    return;
+  }
+
+  if (!content) {
+    res.status(400).json({
+      msg: "content required",
+    });
+    return;
+  }
+
+  const [rs] = await pool.query(
+    `
+    UPDATE wise_saying
+    SET content = ?,
+    author = ?
+    WHERE id = ?
+    `,
+    [content, author, id]
+  );
+
+  res.status(200).json({
+    id,
+    author,
+    content,
+  });
+});
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
